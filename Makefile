@@ -1,4 +1,6 @@
 
+CC=clang
+
 CFLAGS:=-Wall
 # CFLAGS:=-std=c99 -Wall -Wpedantic -Werror -pedantic -pedantic-errors
 # https://stackoverflow.com/questions/6491019/struct-sigaction-incomplete-error
@@ -20,7 +22,7 @@ DEFINES=-DHAVE_QE_CONFIG_H
 
 LIBS+=-lm
 
-LOAD_PATH=./
+LOAD_PATH=.
 
 #############################################################################
 

@@ -37,11 +37,13 @@ void update(double dt, unsigned int ticks) {
 void game_loop() {
   float fps = 1 / 60.0;
   float t = .0;
-  struct timespec current_time, new_time;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &current_time);
+
   float frame_time = .0;
   float delta_time = .0;
 
+  struct timespec current_time, new_time;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &current_time);
+  
   ////////////////////////////////////////////////
   /// fps
   struct timespec initial_time, sample_time;
@@ -70,7 +72,7 @@ void game_loop() {
     ticks++;
     frames++;
 
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
     /// fps
     clock_gettime(CLOCK_MONOTONIC_RAW, &sample_time);
     // get initial time ans sample time in nanoseconds
@@ -87,7 +89,7 @@ void game_loop() {
       frames = 0;
       initial_time = sample_time;
     }
-   	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
   }
 }
 
