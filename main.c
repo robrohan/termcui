@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "tty.h"
+#include "termcui.h"
 
 typedef unsigned int rune;
 
@@ -19,9 +19,9 @@ void render() {
   printf(ESC_CURSOR_POS, h, w);
   printf("%lc", c);
 
-  if (w >= 19 && h >= 19) {
-    printf(ESC_ERASE_SCREEN);
-  }
+  // if (w >= 30 && h >= 30) {
+  //   printf(ESC_ERASE_SCREEN);
+  // }
 }
 
 void show_fps(double dt) {
@@ -30,7 +30,7 @@ void show_fps(double dt) {
 }
 
 void update(double dt, unsigned int ticks) {
-  h = (ticks % 20);
+  h = (ticks % 40);
   w = h;
 }
 

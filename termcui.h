@@ -1,5 +1,5 @@
-#ifndef QI_PLUG_TTY_H
-#define QI_PLUG_TTY_H
+#ifndef TERMCUI_H
+#define TERMCUI_H
 
 // #define NB_COLORS 8
 
