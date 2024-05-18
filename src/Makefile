@@ -12,7 +12,7 @@ else
 CFLAGS+= -Os
 endif 
 
-CFLAGS+= $(CFLAGS) --std=c99 -funsigned-char -I$(LOAD_PATH):../build
+CFLAGS+= $(CFLAGS) -ggdb -funsigned-char -I$(LOAD_PATH):../build
 
 ifdef TARGET_ARCH_X86
 CFLAGS+=-march=i386 -falign-functions=0

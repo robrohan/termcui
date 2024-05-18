@@ -71,7 +71,7 @@ int wefx_open(unsigned int width, unsigned int height, const char *title)
 
 Since we have have a few functions that deal with colors, we create an internal function that
 will help convert three RGB values into a single integer value. This value will go directly
-into the screen buffer to represnet a pixel color.
+into the screen buffer to represent a pixel color.
 
 When we are given three values to represent RGB, we shift the colors up into a single integer.
 Note we need to ensure the values are not greater than 255 since we are only supporting RGB value
@@ -91,7 +91,7 @@ static int rgb_to_int(unsigned int red, unsigned int green, unsigned int blue)
     red = MIN(red, 255);
     green = MIN(green, 255);
     blue = MIN(blue, 255);
-    int color = (0xFF << 24) + (blue << 16) + (green << 8) + (red);
+    int color = (0x00 << 24) + (blue << 16) + (green << 8) + (red);
     return color;
 }
 /*
@@ -119,11 +119,7 @@ By setting the value at $x + y * w$ we are drawing a point at $(x,y)$ on the scr
 */
 void wefx_point(int x, int y)
 {
-    int inboundx = x-1 < 0 ? 0 : x-1;
-    int inboundy = y+1 > h ? y : y+1;
-    //               because 0,0 should display at the bottom left
-    //               we need to add 1 to the height or 0 is offscreen
-    int offset = inboundx + (((int)abs( (inboundy) - h) * w));
+    int offset = x+(y*w);
     if(offset > w*h || offset < 0) {
         return;
     }
