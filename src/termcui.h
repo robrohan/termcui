@@ -66,6 +66,10 @@ the cursor will move to the home position, at the upper left of the screen. */
 /* Restores cursor position after a Save Cursor. */
 #define ESC_UNSAVE_CURSOR          "\033[u"
 
+#define ESC_HIDE_CURSOR            "\033[?25l"
+
+#define ESC_SHOW_CURSOR            "\033[?25h"
+
 /* Save current cursor position. */
 // #define ESC_SAVE_CURSOR_ATTR    "\0337"
 

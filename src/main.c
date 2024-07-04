@@ -27,6 +27,7 @@ rune c = L'*';
 
 void render()
 {
+    printf(ESC_HIDE_CURSOR);
     wefx_draw(screen);
 
     unsigned int pixel_color;
@@ -49,6 +50,7 @@ void render()
             }
         }
     }
+    printf(ESC_SHOW_CURSOR);
 }
 
 void update(double dt, unsigned int ticks)
