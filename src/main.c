@@ -1,10 +1,11 @@
 #include <inttypes.h>
 #include <locale.h>
-// #include <math.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <time.h>
-// #include <unistd.h>
+
+// #include <sys/time.h>
+// #include <signal.h>
 
 #include "termcui.h"
 #include "wefx.h"
@@ -26,14 +27,7 @@ rune c = L'*';
 
 void render()
 {
-    // int h = 0;
-    // int w = 0;
-    // printf(ESC_CURSOR_POS, h, w);
-    // printf("%lc", c);
-
     wefx_draw(screen);
-
-    // printf("%d\n\r", screen[(31-30)*29]);
 
     unsigned int pixel_color;
     for (int y = 0; y < 30; y++)
@@ -41,36 +35,21 @@ void render()
         for (int x = 0; x < 100; x++)
         {
             printf(ESC_CURSOR_POS, y, x);
-            // printf("%lc", screen[x * 100 + y]);
             pixel_color = screen[x + (y * 100)];
-            // printf("%u", pixel_color);
             if (pixel_color > 0)
             {
-                // exit(1);
                 pixel_color = 34; // blue
                 printf(ESC_SET_ATTRIBUTE_MODE_1, pixel_color);
-                printf("0");
+                printf("%c", '*');
             }
             else
             {
                 printf(ESC_SET_ATTRIBUTE_MODE_1, 0);
-                printf("X");
+                printf(" ");
             }
-            // }
         }
     }
-
-    // if (w >= 30 && h >= 30) {
-    // printf(ESC_ERASE_SCREEN);
-    // }
-    // // printf(ESC_CURSOR_POS, 0, 10);
-    // printf("test");
 }
-
-// void show_fps(double dt) {
-//   printf(ESC_CURSOR_POS, 0, 10);
-//   printf("%d fps %2dx%2d", (int)dt, w, h);
-// }
 
 void update(double dt, unsigned int ticks)
 {
@@ -79,11 +58,11 @@ void update(double dt, unsigned int ticks)
 
     wefx_color(0xff, 0xff, 0xff);
     // wefx_point(0, 0); // out of bounds
-    wefx_point(1, 1);
-    wefx_point(3, 3);
-    wefx_point(5, 5);
-    wefx_point(50, 15);
-    wefx_point(99, 29);
+    // wefx_point(1, 1);
+    // wefx_point(3, 3);
+    // wefx_point(5, 5);
+    // wefx_point(50, 15);
+    // wefx_point(99, 29);
     // wefx_point(100, 30); // out of bounds
     wefx_line(1, 1, 99, 29);
     wefx_line(1, 29, 99, 1);
@@ -127,16 +106,46 @@ void game_loop()
     }
 }
 
+// static void resize_sig_handler(int sig)
+// {
+//     printf(ESC_ERASE_SCREEN);
+//     printf("resize!");
+// }
+
+// static void poll_sig_handler(int sig)
+// {
+
+// }
+
+// void resize_handler(void)
+// {
+//     struct sigaction sigact;
+//     struct sigaction sigwinsize;
+//     struct itimerval itimer;
+
+//     sigact.sa_flags = SA_RESTART;
+//     sigact.sa_handler = poll_sig_handler;
+//     sigemptyset(&sigact.sa_mask);
+//     sigaction(SIGVTALRM, &sigact, NULL);
+
+//     //// Window resizing ////
+//     sigemptyset(&sigwinsize.sa_mask);
+//     sigwinsize.sa_flags = 0;
+//     sigwinsize.sa_handler = &resize_sig_handler;
+//     sigaction(SIGWINCH, &sigwinsize, NULL);
+
+//     itimer.it_interval.tv_sec = 0;
+//     itimer.it_interval.tv_usec = 20 * 1000; /* 50 times per second? */
+//     itimer.it_value = itimer.it_interval;
+//     setitimer(ITIMER_VIRTUAL, &itimer, NULL);
+// }
+
 void screen_setup()
 {
     printf(ESC_ERASE_SCREEN);
     // printf(ESC_SET_ATTRIBUTE_MODE_3, 0, 30, 47);
-
     wefx_open(100, 30, "Hello World");
     screen = malloc(100 * 30 * sizeof(int));
-
-    // wefx_clear_color(0x00, 0x00, 0x00);
-    // wefx_clear();
 }
 
 int main()
@@ -145,6 +154,7 @@ int main()
     // printf(ESC_REPORT_DEVICE, 0);
 
     screen_setup();
+    // resize_handler();
     game_loop();
 
     printf(ESC_SET_ATTRIBUTE_MODE_1, 0);
