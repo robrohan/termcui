@@ -4,26 +4,18 @@
 #include <stdio.h>
 #include <time.h>
 
-// #include <sys/time.h>
-// #include <signal.h>
+#include <signal.h>
+#include <sys/time.h>
 
-#include "termcui.h"
+#include "r2_termui.h"
 #include "wefx.h"
 
 #define FPS 30
 #define FRAME_TIME (1.0 / FPS)
 
-typedef unsigned int rune;
-
-// clang-format off
-#define do { L(c) (rune)c } while(0);
-// clang-format on
-
 unsigned int ticks = 0;
 
 static unsigned int *screen;
-
-rune c = L'*';
 
 void render()
 {
@@ -55,17 +47,8 @@ void render()
 
 void update(double dt, unsigned int ticks)
 {
-    // h = (ticks % 40);
-    // w = h;
-
     wefx_color(0xff, 0xff, 0xff);
-    // wefx_point(0, 0); // out of bounds
-    // wefx_point(1, 1);
-    // wefx_point(3, 3);
-    // wefx_point(5, 5);
-    // wefx_point(50, 15);
-    // wefx_point(99, 29);
-    // wefx_point(100, 30); // out of bounds
+    // wefx_point(10, 10);
     wefx_line(1, 1, 99, 29);
     wefx_line(1, 29, 99, 1);
     wefx_circle(50, 15, 10);
@@ -102,50 +85,48 @@ void game_loop()
                 nanosleep(&ts, NULL);
             }
         }
-        // printf(ESC_ERASE_SCREEN);
         render();
         ticks++;
     }
 }
 
-// static void resize_sig_handler(int sig)
-// {
-//     printf(ESC_ERASE_SCREEN);
-//     printf("resize!");
-// }
+static void resize_sig_handler(int sig)
+{
+    printf(ESC_ERASE_SCREEN);
+    printf("resize!\n");
+}
 
-// static void poll_sig_handler(int sig)
-// {
+static void poll_sig_handler(int sig)
+{
+    // ?
+}
 
-// }
+void resize_handler(void)
+{
+    struct sigaction sigact;
+    struct sigaction sigwinsize;
+    struct itimerval itimer;
 
-// void resize_handler(void)
-// {
-//     struct sigaction sigact;
-//     struct sigaction sigwinsize;
-//     struct itimerval itimer;
+    sigact.sa_flags = SA_RESTART;
+    sigact.sa_handler = poll_sig_handler;
+    sigemptyset(&sigact.sa_mask);
+    sigaction(SIGVTALRM, &sigact, NULL);
 
-//     sigact.sa_flags = SA_RESTART;
-//     sigact.sa_handler = poll_sig_handler;
-//     sigemptyset(&sigact.sa_mask);
-//     sigaction(SIGVTALRM, &sigact, NULL);
+    //// Window resizing ////
+    sigemptyset(&sigwinsize.sa_mask);
+    sigwinsize.sa_flags = 0;
+    sigwinsize.sa_handler = &resize_sig_handler;
+    sigaction(SIGWINCH, &sigwinsize, NULL);
 
-//     //// Window resizing ////
-//     sigemptyset(&sigwinsize.sa_mask);
-//     sigwinsize.sa_flags = 0;
-//     sigwinsize.sa_handler = &resize_sig_handler;
-//     sigaction(SIGWINCH, &sigwinsize, NULL);
-
-//     itimer.it_interval.tv_sec = 0;
-//     itimer.it_interval.tv_usec = 20 * 1000; /* 50 times per second? */
-//     itimer.it_value = itimer.it_interval;
-//     setitimer(ITIMER_VIRTUAL, &itimer, NULL);
-// }
+    itimer.it_interval.tv_sec = 0;
+    itimer.it_interval.tv_usec = 20 * 1000; /* 50 times per second? */
+    itimer.it_value = itimer.it_interval;
+    setitimer(ITIMER_VIRTUAL, &itimer, NULL);
+}
 
 void screen_setup()
 {
     printf(ESC_ERASE_SCREEN);
-    // printf(ESC_SET_ATTRIBUTE_MODE_3, 0, 30, 47);
     wefx_open(100, 30, "Hello World");
     screen = malloc(100 * 30 * sizeof(int));
 }
@@ -153,10 +134,9 @@ void screen_setup()
 int main()
 {
     setlocale(LC_ALL, "en_US.UTF-8");
-    // printf(ESC_REPORT_DEVICE, 0);
 
     screen_setup();
-    // resize_handler();
+    resize_handler();
     game_loop();
 
     printf(ESC_SET_ATTRIBUTE_MODE_1, 0);

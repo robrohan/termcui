@@ -1,5 +1,36 @@
-#ifndef TERMCUI_H
-#define TERMCUI_H
+/* r2_termui - v0.0 - public domain very basic, terminal control sequences for
+    cursor control
+    no warranty implied; use at your own risk
+
+    Built in the style of: https://github.com/nothings/stb
+
+    This is written with, mostly, game development in mind.
+
+    Usage:
+    #include "r2_termui.h"
+
+    void main(void) 
+    {
+        printf(ESC_ERASE_SCREEN);
+        printf(ESC_CURSOR_POS, 10, 10);
+        unsigned int pixel_color = 34; // blue
+        printf(ESC_SET_ATTRIBUTE_MODE_1, pixel_color);
+        printf("%s", "Hello World\n");
+        printf(ESC_SET_ATTRIBUTE_MODE_1, 0);
+        printf("\n\n\n");
+        printf(ESC_SHOW_CURSOR);
+    }
+
+LICENSE
+    See end of file for license information.
+*/
+#ifndef R2_TERMCUI_H
+#define R2_TERMCUI_H
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 // #define NB_COLORS 8
 
@@ -140,6 +171,51 @@ the cursor will move to the home position, at the upper left of the screen. */
 47	White
 */
 
-
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* R2_TERMCUI_H */
+
+/*
+------------------------------------------------------------------------------
+This software is available under 2 licenses -- choose whichever you prefer.
+------------------------------------------------------------------------------
+ALTERNATIVE A - MIT License
+Copyright (c) 2020 Rob Rohan
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+------------------------------------------------------------------------------
+ALTERNATIVE B - Public Domain (www.unlicense.org)
+This is free and unencumbered software released into the public domain.
+Anyone is free to copy, modify, publish, use, compile, sell, or distribute this
+software, either in source code form or as a compiled binary, for any purpose,
+commercial or non-commercial, and by any means.
+In jurisdictions that recognize copyright laws, the author or authors of this
+software dedicate any and all copyright interest in the software to the public
+domain. We make this dedication for the benefit of the public at large and to
+the detriment of our heirs and successors. We intend this dedication to be an
+overt act of relinquishment in perpetuity of all present and future rights to
+this software under copyright law.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+------------------------------------------------------------------------------
+*/
 
